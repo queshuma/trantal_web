@@ -46,6 +46,7 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons-vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router';
 import token from '../../api/Token';
+import { alertEffects } from 'element-plus'
 
 let router = useRouter();
 
@@ -71,13 +72,15 @@ const onFinish = (values) => {
       console.log(response.data);
       const tk = token()
       if (tk == null) {
-        
+        alert('登录失败,请重试')
         router.push('/login')
       } else if (tk.userLevel == 1) {
+        alert('登入成功，正在跳转仪表盘')
         router.push("/Buss/board")
-        console.log("level:" + 1)
+        // console.log("level:" + 1)
       } else if (tk.userLevel == 2) {
-        console.log("level:" + 2)
+        alert('登入成功，正在跳转管理员界面')
+        // console.log("level:" + 2)
         router.push("/Admin/home")
       }
     })
