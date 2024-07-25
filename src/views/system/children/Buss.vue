@@ -41,6 +41,7 @@ import userEdit from '../../../components/userEdit.vue'
 import { computed, ref, reactive, onMounted, watch } from 'vue'
 import axios from 'axios'
 import { useStore } from 'vuex'
+import { shouldTransformRef } from 'vue/compiler-sfc';
 
 //分页的配置信息
 const currentPage4 = ref(1)
@@ -67,6 +68,7 @@ onMounted(() => {
   })
     .then(response => {
       // 处理获取到的数据
+      console.log(response.data.result)
       tableData.userInfo = response.data.result
       tableData.bussShow = tableData.userInfo
     })

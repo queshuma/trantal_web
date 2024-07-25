@@ -1,43 +1,38 @@
 <template>
   <h1>用户管理页面</h1>
   <el-input v-model="search" size="default" placeholder="请输入用户手机号：" class="user_search" />
-  <el-table :data="tableData.userInfo"
-    border style="width: 100%">
+  <el-table :data="tableData.userInfo" border style="width: 100%">
+    <el-table-column label="编号" prop="userId" width="60px" />
     <el-table-column label="用户昵称" prop="userAccount" width="140px" />
-    <el-table-column label="用户姓名" prop="userName" width="120px"/>
-    <el-table-column label="手机号" prop="userPhone"  width="120px"/>
+    <el-table-column label="用户姓名" prop="userName" width="120px" />
+    <el-table-column label="手机号" prop="userPhone" width="120px" />
     <el-table-column label="邮箱地址" prop="userEmail" />
-    <el-table-column
-        prop="userStatus"
-        label="用户状态"
-        width="90px"
-      >
-        <template #default="scope">
-          <el-tag type="success"
-            v-if="scope.row.userStatus == 1">正常</el-tag
-          >
-          <el-tag type="danger"
-              v-else>封禁</el-tag
-            >
-        </template>
-      </el-table-column>
+    <el-table-column prop="userStatus" label="用户状态" width="90px">
+      <template #default="scope">
+        <el-tag type="success" v-if="scope.row.userStatus == 1">正常</el-tag>
+        <el-tag type="danger" v-else>封禁</el-tag>
+      </template>
+    </el-table-column>
     <el-table-column label="注册时间" prop="userTime" />
     <el-table-column label="最后登录" prop="userLast" />
     <el-table-column label="操作" align="center" width="80px">
       <template #default="scope">
-        <el-button size="small" type="warning" @click="handleEditStatus(userStatesNormal, scope.row)" v-if="scope.row.userStatus == 1">封禁</el-button>
-        <el-button size="small" type="warning" @click="handleEditStatus(userStatesBanned, scope.row)" v-else>解禁</el-button>
+        <el-button size="small" type="warning" @click="handleEditStatus(userStatesNormal, scope.row)"
+          v-if="scope.row.userStatus == 1">封禁</el-button>
+        <el-button size="small" type="warning" @click="handleEditStatus(userStatesBanned, scope.row)"
+          v-else>解禁</el-button>
         <el-button size="small" type="success" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-        <el-button size="small" type="danger" @click="handleDelete(scope.$index, scope.row)" disabled=true>删除</el-button>
+        <el-button size="small" type="danger" @click="handleDelete(scope.$index, scope.row)"
+          disabled=true>删除</el-button>
       </template>
     </el-table-column>
   </el-table>
-            <!-- 分页 -->
-      <div class="page-option">
-          <el-pagination :page-size="8" :pager-count="10" layout="prev, pager, next" :total=tableData.userCout
-              @current-change="pageChange" />
-      </div>
-              <userEdit/>
+  <!-- 分页 -->
+  <div class="page-option">
+    <el-pagination :page-size="8" :pager-count="10" layout="prev, pager, next" :total=tableData.userCout
+      @current-change="pageChange" />
+  </div>
+  <userEdit />
 </template>
 
 <script lang="js" setup>
@@ -100,6 +95,7 @@ const getUser = function (page) {
       .then(response => {
         // 处理获取到的数据
         tableData.userInfo = response.data.result
+        // console.log(tableData.userInfo)
       })
   } else { 
     axios.request({

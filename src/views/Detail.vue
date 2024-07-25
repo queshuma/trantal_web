@@ -8,7 +8,9 @@
                 <el-main>
                     <detailMain></detailMain>
                 </el-main>
-                <el-footer>Footer</el-footer>
+                <el-footer>
+                    <indexBottom></indexBottom>
+                </el-footer>
             </el-container>
         </div>
     </div>
@@ -17,6 +19,7 @@
 <script lang="js" setup>
 import indexTop from '../components/indexTop.vue'
 import detailMain from '../components/detailMain.vue'
+import indexBottom from '../components/indexBottom.vue';
 </script>
 
 <style lang="scss" scoped>

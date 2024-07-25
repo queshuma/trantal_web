@@ -70,6 +70,7 @@
 
 import axios from 'axios';
 import { onMounted, ref, reactive, VueElement } from 'vue';
+import { useRouter } from 'vue-router'
 import indexTop from '../../components/indexTop.vue';
 import shopLeft from '../../components/shopLeft.vue';
 import indexBottom from '../../components/indexBottom.vue'
@@ -83,9 +84,11 @@ const receive = ref()
 const remark = ref()
 const receive_option = ref()
 const checkAllow = ref(true)
+let router = useRouter();
 
 //初始化数据
 onMounted(() => {
+  console.log("test")
   //初始化购物车商品数据
   axios.request({
     url: 'http://localhost/Shop/info/userId',
@@ -170,7 +173,7 @@ const payEvent = () => {
   });
   console.log(submitData)  
   axios.request({
-    url: 'http://localhost/Order/add',
+    url: 'http://localhost/Order/order',
     method: 'post',
     headers: { 'Content-Type': 'application/json' },
     params: {},
@@ -178,7 +181,9 @@ const payEvent = () => {
     withCredentials: true, // 确保发送凭据
   })
     .then(response => {
-      console.log(response)
+      // console.log(response)
+      alert('付款成功!即将跳转到 我的订单 !')
+      router.push('/User/Order')
     })
 }
 
@@ -190,7 +195,7 @@ function scrollFunction() {
   // 检查 fixedDiv 是否为 null  
   if (fixedDiv === null) {
     // 如果为 null，则不执行任何操作或可以选择记录一个错误消息  
-    console.error("Element with ID 'settle' not found.");
+    // console.error("Element with ID 'settle' not found.");
     return; // 提前返回，避免后续代码执行  
   } 
   
@@ -205,6 +210,20 @@ function scrollFunction() {
 </script>
 
 <style lang="scss" scoped>
+
+.el-header {
+  padding: 0;
+  margin: 0;
+  height: auto;
+}
+
+.el-footer {
+  height: 200px;
+  width: 100%;
+  margin-top: 50px;
+  padding: 0 50px;
+  background-color: #a09f9f;
+}
 body {
   position: relative;
 }
@@ -249,6 +268,7 @@ a {
     display: inline-block;
     vertical-align: top;
     padding-left: 30px;
+    width: 60%;
   }
 
   .base {

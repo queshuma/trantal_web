@@ -68,7 +68,7 @@ import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const formSize = ref('default')
-const orderData = ref()
+const orderData = ref({})
 const orderUUID = ref()
 const objectId = ref()
 
@@ -76,9 +76,9 @@ onMounted(() => {
     //获取cookie中的值，并进行跳转
     const queryDict = router.currentRoute.value.query
     if ("orderUUID" in queryDict && "objectId" in queryDict) {
+        console.log("success")
         orderUUID.value = queryDict["orderUUID"]
         objectId.value = queryDict["objectId"]
-        console.log("result")
         axios.request({
             url: 'http://localhost/Order/info/orderUUID',
             method: 'get',
@@ -87,7 +87,7 @@ onMounted(() => {
                 objectId: objectId.value
             },
             data: {},
-            // withCredentials: true
+            withCredentials: true
         })
             .then(response => {
                 // 处理获取到的数据

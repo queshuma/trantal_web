@@ -60,7 +60,7 @@ const UserData = ref({})
 
 
 axios.request({
-    url: 'http://localhost/User/info/id',
+    url: 'http://localhost/User/info',
     method: 'get',
     params: {},
     data: {},

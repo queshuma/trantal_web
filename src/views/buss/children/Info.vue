@@ -41,20 +41,21 @@ import axios from 'axios';
 const formSize = ref('default')
 const UserData = ref({})
 
-
-axios.request({
-  url: 'http://localhost/User/info/all',
-  method: 'get',
-  params: {},
-  data: {},
-  withCredentials: true
-})
-  .then(response => {
-    // 处理获取到的数据
-    console.log(response)
-    UserData.value = response.data.result
-    console.log(UserData.value.userAccount)
+onMounted(() => { 
+  axios.request({
+    url: 'http://localhost/User/info',
+    method: 'get',
+    params: {},
+    data: {},
+    withCredentials: true
   })
+    .then(response => {
+      // 处理获取到的数据
+      console.log("response", response.data)
+      UserData.value = response.data.result
+      console.log(UserData.value.userAccount)
+    })
+})
 
 const submitInfo = () => {
   console.log(UserData.value.userAccount)

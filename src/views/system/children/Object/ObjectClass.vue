@@ -31,9 +31,8 @@
                 </template>
             </el-table-column>
             <el-table-column prop="$treeNodeId" label="树集编号" />
-            <el-table-column fixed="right" label="Operations" width="120">
+            <el-table-column fixed="right" label="编辑" width="120">
                 <template #default="scope">
-                    <el-button link type="primary" size="small" @click="removeEvent(scope.row)">下线</el-button>
                     <el-button link type="primary" size="small" @click="editClassesEvent(scope.row)">编辑</el-button>
                 </template>
             </el-table-column>

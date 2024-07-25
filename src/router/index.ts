@@ -78,12 +78,6 @@ const router = createRouter({
               component: () => import("../views/system/children/User/UserLevel.vue")
             },
             {
-              label: '用户登录信息',
-              title: '用户登录信息',
-              path: '/Admin/userlogininfo',
-              component: () => import("../views/system/children/User/UserLoginInfo.vue")
-            },
-            {
               label: '用户密码修改',
               title: '用户密码修改',
               path: '/Admin/userpass',

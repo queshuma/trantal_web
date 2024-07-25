@@ -40,7 +40,7 @@
                                         <el-button type="default" size="small" v-if="o.orderStatus == 2" @click="returnSale(o.orderUUID, o.objectId)">退货申请</el-button>
                                         <el-button type="warning" size="small" v-else-if="o.orderStatus == 3">发起退货</el-button>
                                         <el-button type="warning" size="small"
-                                            v-else-if="o.va.orderStatus == 4">同意退货</el-button>
+                                            v-else-if="o.orderStatus == 4">同意退货</el-button>
                                             <el-button type="warning" size="small"
                                                 v-else-if="o.orderStatus == 5">取消订单</el-button>
                                     </div>
@@ -240,6 +240,20 @@ a {
     padding: 0;
     margin: 0;
     height: auto;
+}
+
+.el-header {
+    padding: 0;
+    margin: 0;
+    height: auto;
+}
+
+.el-footer {
+    height: 200px;
+    width: 100%;
+    margin-top: 50px;
+    padding: 0 50px;
+    background-color: #a09f9f;
 }
 
 

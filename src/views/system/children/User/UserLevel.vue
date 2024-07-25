@@ -80,8 +80,8 @@ const getUserData = function () {
     })
         .then(response => {
             // 处理获取到的数据
-            console.log(response)
             UserData.value = response.data.result
+            console.log(response)
         })
  }
 

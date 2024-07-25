@@ -5,7 +5,8 @@
                 <div class="text">回到首页</div>
             </router-link>
             <router-link :to="{ name: 'login' }">
-                <div class="text">登录</div>
+                <div class="text" v-if="token() == null">登录</div>
+                <div class="text" v-else>{{ token().userAccount }}</div>
             </router-link>
             <router-link :to="{ name: 'UserShop' }">
                 <div class="shop text">我的购物车</div>
@@ -34,6 +35,8 @@
 </template>
 
 <script lang="js" setup>
+import { onMounted } from 'vue';
+import token from '../api/Token.js'
 
 </script>
 

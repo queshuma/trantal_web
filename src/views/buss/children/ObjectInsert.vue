@@ -128,6 +128,7 @@ axios.request({
     })
 
 const submit = () => {
+    alert("商品添加成功")
     data.objectImage = imageFiles.value.toString()
     data.objectBanner = bannerFiles.value.toString()
     data.objectImg = imgFiles.value.toString()

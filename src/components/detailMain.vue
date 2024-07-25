@@ -27,7 +27,7 @@
                 <el-input-number v-model="num" :min="1" :max="10" @change="handleChange" class="info_base" />
                 <div class="info_base todo">
                     <div class="todo_button add_shop" @click="insertShop">加入购物车</div>
-                    <div class="todo_button buy_shop">购买商品</div>
+                    <div class="todo_button buy_shop" @click="toShop">购买商品</div>
                 </div>
             </div>
             <div class="base_detail">
@@ -51,9 +51,12 @@
 <script lang="js" setup>
 import { onMounted, reactive, ref } from "vue"
 import axios from "axios"
+import token from '../api/Token.js'
+import { useRouter } from "vue-router";
 
 const data = ref({})
 const num = ref(1)
+const router = useRouter()
 
 const handleChange = (value) => {
     console.log(value)
@@ -91,12 +94,22 @@ onMounted(() => {
     }
 })
 const insertShop = function () { 
-    console.log(data.objectId)
+    let tk = token();
+    console.log(tk.userLevel)
+    if (tk == null) {
+        alert("您未登录,请先登录!")
+        router.push('/login');
+        return;
+    } else if (tk.userLevel >= 2) { 
+        alert("您无权限,请先切换账号!")
+        router.push('/login');
+        return;
+    }
     axios.request({
         url: 'http://localhost/Shop/shop',
         method: 'post',
         params: {
-            objectId: data.objectId,
+            objectId: data.value.objectId,
             shopCout: 1
         },
         data: {},
@@ -108,7 +121,9 @@ const insertShop = function () {
         })
 
 }
-
+const toShop = function () { 
+    router.push('/User/Shop')
+}
 
 </script>
 

@@ -1,16 +1,18 @@
 <template>
+  <indexTop></indexTop>
   <div class="register">
     <h1>用户注册</h1>
-    <a-form :model="formState" :rules="rules" name="normal_register" class="register-form" @finish="onFinish" @finishFailed="onFinishFailed">
+    <a-form :model="formState" :rules="rules" name="normal_register" class="register-form" @finish="onFinish"
+      @finishFailed="onFinishFailed">
 
-      <a-form-item label="昵称" name="userAccount" >
+      <a-form-item label="昵称" name="userAccount">
         <a-input v-model:value="formState.userAccount">
           <template #prefix>
             <UserOutlined class="site-form-item-icon" />
           </template>
         </a-input>
       </a-form-item>
-      
+
       <a-form-item label="姓名" name="userName">
         <a-input v-model:value="formState.userName">
           <template #prefix>
@@ -67,15 +69,11 @@ import { reactive, computed } from 'vue'
 import * as check from '../../util/userCheck.js'
 import axios from 'axios'
 import { useRouter } from 'vue-router';
+import indexTop from '../../components/indexTop.vue'
+import indexBottom from '../../components/indexBottom.vue'
 
 const router = useRouter()
-const formState = reactive<FormState>({
-  userAccount: '',
-  userName: '',
-  userPhone: '',
-  userEmail: '',
-  userPassword: '',
-  userRePassword: '',
+const formState = reactive({
 })
 
 //用户昵称失去焦点需要做的逻辑
@@ -208,7 +206,7 @@ body,
 
 .register {
   width: 600px;
-  background-color: rgba(0, 0, 200, 0.4);
+  background-color: rgba(183, 183, 247, 0.4);
   margin: 0 auto;
   border: 0px solid black;
   border-radius: 2rem;

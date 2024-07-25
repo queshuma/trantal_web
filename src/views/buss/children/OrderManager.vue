@@ -1,6 +1,6 @@
 <template>
     <div class="content">
-        <h1>商品管理页面</h1>
+        <h1>订单管理页面</h1>
         <el-input v-model="search" size="default" placeholder="请输入商品名称：" class="object_search" />
         <el-table :data="tableData.orderInfo" border style="width: 100%">
             <el-table-column label="订单Id" prop="orderUUID" />

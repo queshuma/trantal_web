@@ -1,41 +1,53 @@
 <template>
-  <indexTop></indexTop>
-  <div class="login">
-    <h1>用户登录</h1>
-    <a-form :model="formState" name="normal_login" class="login-form" @finish="onFinish" @finishFailed="onFinishFailed">
-      <a-form-item name="username" :rules="[{ required: true, message: 'Please input your username!' }]">
-        <a-input v-model:value="formState.username">
-          <template #prefix>
-            <UserOutlined class="site-form-item-icon" />
-          </template>
-        </a-input>
-      </a-form-item>
+  <div class="common-layout">
+    <el-container>
+      <el-header>
+        <indexTop></indexTop>
+      </el-header>
+      <el-main>
+        <div class="login">
+          <h1>用户登录</h1>
+          <a-form :model="formState" name="normal_login" class="login-form" @finish="onFinish"
+            @finishFailed="onFinishFailed">
+            <a-form-item name="username" :rules="[{ required: true, message: 'Please input your username!' }]">
+              <a-input v-model:value="formState.username">
+                <template #prefix>
+                  <UserOutlined class="site-form-item-icon" />
+                </template>
+              </a-input>
+            </a-form-item>
 
-      <a-form-item name="password" :rules="[{ required: true, message: 'Please input your password!' }]">
-        <a-input-password v-model:value="formState.password">
-          <template #prefix>
-            <LockOutlined class="site-form-item-icon" />
-          </template>
-        </a-input-password>
-      </a-form-item>
+            <a-form-item name="password" :rules="[{ required: true, message: 'Please input your password!' }]">
+              <a-input-password v-model:value="formState.password">
+                <template #prefix>
+                  <LockOutlined class="site-form-item-icon" />
+                </template>
+              </a-input-password>
+            </a-form-item>
 
-      <a-form-item>
-        <a-form-item name="remember" no-style>
-          <a-checkbox v-model:checked="formState.remember"> 记住密码 </a-checkbox>
-        </a-form-item>
-        <a class="login-form-forgot" href=""> 忘记密码 </a>
-      </a-form-item>
+            <a-form-item>
+              <a-form-item name="remember" no-style>
+                <a-checkbox v-model:checked="formState.remember"> 记住密码 </a-checkbox>
+              </a-form-item>
+              <a class="login-form-forgot" href=""> 忘记密码 </a>
+            </a-form-item>
 
-      <a-form-item>
-        <a-button :disabled="disabled" type="primary" html-type="submit" class="login-form-button">
-          登录
-        </a-button>
-        没有账号
-        <a href="/register">注册账号</a>
-      </a-form-item>
-    </a-form>
+            <a-form-item>
+              <a-button :disabled="disabled" type="primary" html-type="submit" class="login-form-button">
+                登录
+              </a-button>
+              没有账号
+              <a href="/register">注册账号</a>
+            </a-form-item>
+          </a-form>
+        </div>
+      </el-main>
+      <el-footer>
+        <indexBottom></indexBottom>
+      </el-footer>
+    </el-container>
   </div>
-  <indexBottom></indexBottom>
+
 </template>
 
 <script setup lang="js">
@@ -81,7 +93,10 @@ const onFinish = (values) => {
       } else if (tk.userLevel == 2) {
         alert('登入成功，正在跳转管理员界面')
         // console.log("level:" + 2)
-        router.push("/Admin/home")
+        router.push("/Admin/board")
+      } else {
+        alert("登录成功")
+        router.push("/")
       }
     })
 }
@@ -100,7 +115,27 @@ body,
 #app {
   width: 100%;
 }
+.el-main {
+  //width: 80%;
+  width: 1100px;
+  margin: 0 auto;
+  padding: 0;
 
+}
+
+.el-header {
+  padding: 0;
+  margin: 0;
+  height: auto;
+}
+
+.el-footer {
+  height: 200px;
+  width: 100%;
+  margin-top: 50px;
+  padding: 0 50px;
+  background-color: #a09f9f;
+}
 .login {
   width: 600px;
   background-color: rgba(169, 169, 249, 0.4);
