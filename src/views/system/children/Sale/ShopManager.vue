@@ -26,6 +26,7 @@ import axios from 'axios'
 import { useStore } from 'vuex'
 import objectEdit from '../../../../components/objectEdit.vue'
 import { selectGroupKey, tagEmits } from 'element-plus'
+import link from "@/api/Link.js";
 
 const search = ref('')
 //分页的配置信息
@@ -46,19 +47,10 @@ const defaultPage = 1;
 let store = useStore()
 
 onMounted(() => {
-    axios.request({
-        url: 'http://localhost/Shop/info/all',
-        method: 'GET',
-        params: {},
-        data: {},
-        // withCredentials: true, // 确保发送凭据
-    })
-        .then(response => {
-            tableData.objectInfo = response.data.result
-            console.log("info")
-            console.log(tableData.objectInfo)
-        })
-
+  link("/Shop/info/all", 'GET', {}, {}, {}).then(response => {
+    // 处理获取到的数据
+    tableData.objectInfo = response.data.result
+  })
     getObject(defaultPage)
 })
 
@@ -71,20 +63,10 @@ watch(search, (newValue) => {
 
 //获取商品数据函数
 const getObject = function (page) {
-    axios.request({
-        url: 'http://localhost/Shop/info/all',
-        method: 'GET',
-        params: {
-            // pageNum: page,
-            // pageSize: 9
-        },
-        data: {}
-    })
-        .then(response => {
-            // 处理获取到的数据
-            tableData.objectInfo = response.data.result
-            // console.log("data", response.data.result)
-        })
+  link("/Shop/info/all", 'GET', {}, {}, {}).then(response => {
+    // 处理获取到的数据
+    tableData.objectInfo = response.data.result
+  })
 }
 
 //商品状态编辑事件
@@ -106,21 +88,13 @@ const handleEdit = (index, row) => {
 
 //商品状态更新事件
 const updateObjectStatus = (objectId, objectStatus) => {
-    axios.request({
-        url: 'http://localhost/Object/status',
-        method: 'PUT',
-        params: {
-            objectId: objectId,
-            objectStatus: objectStatus
-        },
-        data: {
-        }
-    })
-        .then(response => {
-            // 处理获取到的数据
-            tableData.userInfo = response.data.result
-            // console.log(response.data)
-        })
+  link("/Object/status", 'PUT', {}, {
+    objectId: objectId,
+    objectStatus: objectStatus
+  }, {}).then(response => {
+    // 处理获取到的数据
+    tableData.userInfo = response.data.result
+  })
 }
 
 //页码变化后事件

@@ -66,72 +66,43 @@
 
 <script setup lang="js">
 
-import axios from 'axios';
 import { onMounted, ref, reactive } from 'vue';
-import indexTop from '../components/indexTop.vue'
-import indexBottom from '../components/indexBottom.vue'
+import link from "@/api/Link.js";
 
 const objectClassList = ref({})
 const objectList = ref({})
 const currentDate = ref(new Date())
 const objectModelList = ref({})
 const bannerList = [
-    "http://localhost:8898/poster/poster_dajiang.jpg",
-    "http://localhost:8898/poster/poster_apple.jpg",
-    "http://localhost:8898/poster/poster_xiaomi.jpg",
-    "http://localhost:8898/poster/poster_pico.jpg"
+    "http://49.232.61.41:8898/poster/poster_dajiang.jpg",
+    "http://49.232.61.41:8898/poster/poster_apple.jpg",
+    "http://49.232.61.41:8898/poster/poster_xiaomi.jpg",
+    "http://49.232.61.41:8898/poster/poster_pico.jpg"
 ]
 
 onMounted(() => { 
     //获取列表分类
-    axios.request({
-        url: 'http://localhost/ObjClasses/info/listStatus',
-        method: 'GET',
-        params: {},
-        data: {}
+    link("/ObjClasses/info/listStatus", 'GET',{}, {}).then(response => {
+      // 处理获取到的数据
+      console.log(response.data.result)
+      objectClassList.value = response.data.result
     })
-        .then(response => {
-            // 处理获取到的数据
-            console.log(response.data.result)
-            objectClassList.value = response.data.result
-            // getObjectList(objectClassList)
-        })
 
-        //获取商品分类
-        axios.request({
-        url: 'http://localhost/ObjClasses/info/objectStatus',
-        method: 'GET',
-        params: {},
-        data: {}
+    //获取商品分类
+    link("/ObjClasses/info/objectStatus", 'GET',{}, {}).then(response => {
+      // 处理获取到的数据
+      objectModelList.value = response.data.result
+      getObjectList()
     })
-        .then(response => {
-            // 处理获取到的数据
-            objectModelList.value = response.data.result
-            // getObjectList(response.data.result)
-            getObjectList()
-        })
 })
 
 const getObjectList = function () {
     for (let i = 0; i < objectModelList.value.length; i++) {
         const oclLabel = objectModelList.value[i].classesName
-        console.log(oclLabel)
-        axios.request({
-            url: 'http://localhost/Object/info/classes',
-            method: 'get',
-            params: { classesName: oclLabel, pageNum:0, pageSize:8 },
-            data: {}
+      // 获取商品分类
+        link("/Object/info/classes", 'GET',{}, { classesName: oclLabel, pageNum:0, pageSize:8 }).then(response => {
+            (objectList.value)[oclLabel] = response.data.result
         })
-            .then(response => {
-                // 处理获取到的数据
-                const data = response.data.result
-                console.log(response.data.result);
-                (objectList.value)[oclLabel] = data;
-                console.log(objectList.value)
-            })
-        // if (i >= 8) { 
-        //     break;
-        // }
     }
 }
 

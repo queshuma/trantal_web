@@ -41,6 +41,7 @@ import { useStore } from 'vuex'
 import objectEdit from '../../../components/objectEdit.vue'
 import { selectGroupKey, tagEmits } from 'element-plus'
 import { useRouter } from 'vue-router'
+import link from "@/api/Link.js";
 
 const router = useRouter()
 const search = ref('')
@@ -67,36 +68,20 @@ onMounted(() => {
 })
 
 //获取订单数量
-const orderCout = function () { 
-    axios.request({
-        url: 'http://localhost/Order/cout/buss',
-        method: 'GET',
-        params: {},
-        data: {},
-        withCredentials: true
-    })
-        .then(response => {
-            tableData.orderCout = response.data.result
-        })
+const orderCout = function () {
+  link("/Order/cout/buss", 'GET',{}, {}, {}, true).then(response => {
+    tableData.orderCout = response.data.result
+  })
 }
 
 //获取订单数据
-const getObject = function (page) { 
-    axios.request({
-        url: 'http://localhost/Order/info/buss',
-        method: 'GET',
-        params: {
-            pageNum: page,
-            pageSize: defatultPageSize
-        },
-        data: {},
-        withCredentials: true
-    })
-        .then(response => {
-            // 处理获取到的数据
-            tableData.orderInfo = response.data.result
-            console.log("data", response.data.result)
-        })
+const getObject = function (page) {
+  link("/Order/info/buss", 'GET',{}, {
+    pageNum: page,
+    pageSize: defatultPageSize
+  }, {}, true).then(response => {
+    tableData.orderInfo = response.data.result
+  })
 }
 
 //跳转到商品详情页

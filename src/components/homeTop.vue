@@ -14,23 +14,16 @@
 <script lang="js" setup>
 import axios from 'axios'
 import { useRouter } from 'vue-router'
+import link from "@/api/Link.js";
 
 let router = useRouter()
 
-const logout = function () { 
-    console.log("ts");
-    axios.request({
-        url: 'http://localhost/User/logout',
-        method: 'get',
-        params: {},
-        data: {},
-        withCredentials: true
-    })
-        .then(response => {
-            // 处理获取到的数据
-            const data = response.data.result
-            router.push('/login')
-        })
+const logout = function () {
+  link("/User/logout", 'GET', {}, {}, {}, true).then(response => {
+    // 处理获取到的数据
+    const data = response.data.result
+    router.push('/login')
+  })
 }
 </script>
 

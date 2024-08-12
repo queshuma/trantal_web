@@ -85,6 +85,7 @@ import { reactive, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import axios from 'axios';
 import { Delete, Download, Plus, ZoomIn } from '@element-plus/icons-vue'
+import link from "@/api/Link.js";
 
 let store = useStore()
 
@@ -144,34 +145,11 @@ let formUpdate = () => {
     data.value.objectImage = data.value.objectImage.toString()
     data.value.objectBanner = data.value.objectBanner.toString()
     data.value.objectImg = data.value.objectImg.toString()
-    axios.request({
-        url: 'http://localhost/Object/object',
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        withCredentials: true, // 确保发送凭据
-        params: {
-            objectId: data.value.objectId,
-            objectName: data.value.objectName,
-            objectTitle: data.value.objectTitle,
-            objectCost: data.value.objectCost,
-            objectImage: data.value.objectImage,
-            objectPrice: data.value.objectPrice,
-            objectInfo: data.value.objectInfo,
-            objectCout: data.value.objectCout,
-            objectStatus: data.value.objectStatus,
-            objectTime: data.value.objectTime,
-            objectClasses: data.value.objectClasses,
-            objectBanner: data.value.objectBanner,
-            userId: data.value.userId,
-            objectImg: data.value.objectImg,
-        },
+    link("/Object/object", 'PUT', {}, data.value, {'Content-Type': 'application/json'}, true).then(response => {
+      // 处理获取到的数据
+      store.state.HomeModule.objectEditVisible = false
+      alert("商品修改成功！")
     })
-        .then(response => {
-            console.log(response.data)
-            store.state.HomeModule.objectEditVisible = false
-            alert("商品修改成功！")
-        })
-
     // console.log(data.value)
 }
 

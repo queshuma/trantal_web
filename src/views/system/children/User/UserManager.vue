@@ -40,6 +40,7 @@ import userEdit from '../../../../components/userEdit.vue'
 import { computed, ref, reactive, onMounted, watch } from 'vue'
 import axios from 'axios'
 import { useStore } from 'vuex'
+import link from "@/api/Link.js";
 
 const search = ref('')
 //分页的配置信息
@@ -83,33 +84,18 @@ const handleEditStatus = (index, row) => {
 const getUser = function (page) { 
   console.log(search.value)
   if (search.value == '') {
-    axios.request({
-      url: 'http://localhost/User/info/all',
-      method: 'GET',
-      params: {
-        pageNum: page,
-        pageSize: 8
-      },
-      data: {}
+    link("/User/info/all", 'GET', {}, {
+      pageNum: page,
+      pageSize: 8
+    }, {}).then(response => {
+      // 处理获取到的数据
+      tableData.userInfo = response.data.result
     })
-      .then(response => {
-        // 处理获取到的数据
-        tableData.userInfo = response.data.result
-        // console.log(tableData.userInfo)
-      })
-  } else { 
-    axios.request({
-      url: 'http://localhost/User/info/name',
-      method: 'GET',
-      params: {
-        'userName': search.value
-      },
-      data: {}
+  } else {
+    link("/User/info/name", 'GET', {}, {'userName': search.value}, {}).then(response => {
+      // 处理获取到的数据
+      tableData.userInfo = response.data.result
     })
-      .then(response => {
-        // 处理获取到的数据
-        tableData.userInfo = response.data.result
-      })
   }
   
 }
@@ -117,18 +103,10 @@ const getUser = function (page) {
 //获取用户信息数量
 const getUserCout = function () {
   if (search.value == '') {
-    axios.request({
-      url: 'http://localhost/User/cout',
-      method: 'GET',
-      params: {
-      },
-      data: {}
+    link("/User/cout", 'GET', {}, {}, {}).then(response => {
+      // 处理获取到的数据
+      tableData.userCout = response.data.result
     })
-      .then(response => {
-        // 处理获取到的数据
-        tableData.userCout = response.data.result
-        // console.log(response.data.result)
-      })
   } else { 
     tableData.userCout = 1;
   }
@@ -157,21 +135,13 @@ const handleCurrentChange = (val) => {
   currentPage4.value = val
 }
 const updateUserStatus = (userId, userStatus) => {
-  axios.request({
-    url: 'http://localhost/User/status',
-    method: 'PUT',
-    params: {
-      userId: userId,
-      userStatus: userStatus
-    },
-    data: {
-    }
+  link("/User/status", 'PUT', {}, {
+    userId: userId,
+    userStatus: userStatus
+  }, {}).then(response => {
+    // 处理获取到的数据
+    console.log(response.data)
   })
-    .then(response => {
-      // 处理获取到的数据
-      // tableData.userInfo = response.data.result
-      console.log(response.data)
-    })
 }
 
 

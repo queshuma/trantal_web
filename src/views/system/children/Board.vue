@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <h2 style="text-align: center;color: blue;">数派π | 数智智慧大屏</h2>
-    <el-row style="box-shadow: ;">
+    <el-row>
       <el-col :span="6">
         <el-statistic title="商品数量" :value=data.objectCout />
       </el-col>
@@ -56,6 +56,7 @@ import { ref, reactive, onMounted, watch, nextTick } from 'vue'
 import { useTransition } from '@vueuse/core'
 import axios from 'axios'
 import * as echarts from 'echarts';
+import link from "@/api/Link.js";
 
 const data = reactive({
   //商品数量
@@ -125,177 +126,88 @@ const getData = function () {
 
 //查询商品数量
 const getCout = function () {
-  axios.request({
-    url: 'http://localhost/Object/cout',
-    method: 'GET',
-    params: {
-    },
-    data: {
-    },
-    withCredentials: true
+  link("/Object/cout", 'GET',{}, {}, {}, true).then(response => {
+    // 处理获取到的数据
+    data.objectCout = response.data.result
   })
-    .then(response => {
-      // 处理获取到的数据
-      data.objectCout = response.data.result
-    })
 }
 
 //查询上架商品数量
 const getNorCout = function () {
-  axios.request({
-    url: 'http://localhost/Object/nor/cout',
-    method: 'GET',
-    params: {
-    },
-    data: {
-    },
-    withCredentials: true
+  link("/Object/nor/cout", 'GET',{}, {}, {}, true).then(response => {
+    // 处理获取到的数据
+    data.norObjectCout = response.data.result
   })
-    .then(response => {
-      // 处理获取到的数据
-      data.norObjectCout = response.data.result
-    })
 }
 
 //查询下架商品数量
 const getErrCout = function () {
-  axios.request({
-    url: 'http://localhost/Object/err/cout',
-    method: 'GET',
-    params: {
-    },
-    data: {
-    },
-    withCredentials: true
+  link("/Object/err/cout", 'GET',{}, {}, {}, true).then(response => {
+    // 处理获取到的数据
+    data.errObjectCout = response.data.result
   })
-    .then(response => {
-      // 处理获取到的数据
-      data.errObjectCout = response.data.result
-    })
 }
 
 //查询加入购物车数量
 const shopCout = function () {
-  axios.request({
-    url: 'http://localhost/Shop/cout',
-    method: 'GET',
-    params: {
-    },
-    data: {
-    },
-    withCredentials: true
+  link("/Shop/cout", 'GET',{}, {}, {}, true).then(response => {
+    // 处理获取到的数据
+    data.shopCout = response.data.result
   })
-    .then(response => {
-      data.shopCout = response.data.result
-    })
 }
 
 
 //查询加入购物车的人数
 const personCout = function () {
-  axios.request({
-    url: 'http://localhost/Shop/person/cout',
-    method: 'GET',
-    params: {
-    },
-    data: {
-    },
-    withCredentials: true
+  link("/Shop/person/cout", 'GET',{}, {}, {}, true).then(response => {
+    // 处理获取到的数据
+    data.personCout = response.data.result
   })
-    .then(response => {
-      data.personCout = response.data.result
-    })
 }
 
 //查询订单完成的金额
 const complete = function () {
-  axios.request({
-    url: 'http://localhost/Order/complete',
-    method: 'GET',
-    params: {
-    },
-    data: {
-    },
-    withCredentials: true
+  link("/Order/complete", 'GET',{}, {}, {}, true).then(response => {
+    // 处理获取到的数据
+    data.completeCout = response.data.result.orderCout
+    data.completeGather = response.data.result.orderGather
   })
-    .then(response => {
-      // 处理获取到的数据
-      data.completeCout = response.data.result.orderCout
-      data.completeGather = response.data.result.orderGather
-    })
 }
 
 //查询待发货的订单信息
 const noTrack = function () {
-  axios.request({
-    url: 'http://localhost/Order/noTrack',
-    method: 'GET',
-    params: {
-    },
-    data: {
-    },
-    withCredentials: true
+  link("/Order/noTrack", 'GET',{}, {}, {}, true).then(response => {
+    // 处理获取到的数据
+    data.noTrackCout = response.data.result.orderCout
+    data.noTrackGather = response.data.result.orderGather
   })
-    .then(response => {
-      // 处理获取到的数据
-      data.noTrackCout = response.data.result.orderCout
-      data.noTrackGather = response.data.result.orderGather
-    })
 }
 
 //查询未收货的订单信息
 const noReceive = function () {
-  axios.request({
-    url: 'http://localhost/Order/noReceive',
-    method: 'GET',
-    params: {
-    },
-    data: {
-    },
-    withCredentials: true
+  link("/Order/noReceive", 'GET',{}, {}, {}, true).then(response => {
+    // 处理获取到的数据
+    data.noReceiveCout = response.data.result.orderCout
+    data.noReceiveGather = response.data.result.orderGather
   })
-    .then(response => {
-      // 处理获取到的数据
-      data.noReceiveCout = response.data.result.orderCout
-      data.noReceiveGather = response.data.result.orderGather
-    })
 }
 
 //查询退货处理的订单信息
 const orderBack = function () {
-  axios.request({
-    url: 'http://localhost/Order/orderBack',
-    method: 'GET',
-    params: {
-    },
-    data: {
-    },
-    withCredentials: true
+  link("/Order/orderBack", 'GET',{}, {}, {}, true).then(response => {
+    // 处理获取到的数据
+    data.orderBackCout = response.data.result.orderCout
+    data.orderBackGather = response.data.result.orderGather
   })
-    .then(response => {
-      // 处理获取到的数据
-      console.log(response.data.result)
-      data.orderBackCout = response.data.result.orderCout
-      data.orderBackGather = response.data.result.orderGather
-    })
 }
 
 //取消订单信息
 const cancel = function () {
-  axios.request({
-    url: 'http://localhost/Order/cancel',
-    method: 'GET',
-    params: {
-    },
-    data: {
-    },
-    withCredentials: true
+  link("/Order/cancel", 'GET',{}, {}, {}, true).then(response => {
+    // 处理获取到的数据
+    data.cancelCout = response.data.result.orderCout
+    data.cancelGather = response.data.result.orderGather
   })
-    .then(response => {
-      // 处理获取到的数据
-      data.cancelCout = response.data.result.orderCout
-      data.cancelGather = response.data.result.orderGather
-    })
 }
 
 //商品数据图事件

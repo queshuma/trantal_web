@@ -65,6 +65,7 @@ import indexTop from '../../components/indexTop.vue';
 import shopLeft from '../../components/shopLeft.vue';
 import indexBottom from '../../components/indexBottom.vue'
 import Decimal from 'decimal.js'
+import link from "@/api/Link.js";
 
 const orderData = ref()
 const submitData = reactive([])
@@ -77,46 +78,26 @@ const checkAllow = ref(true)
 //初始化数据
 onMounted(() => {
     //初始化购物车商品数据
-    axios.request({
-        url: 'http://localhost/Order/info/user',
-        method: 'GET',
-        params: {},
-        data: {},
-        withCredentials: true, // 确保发送凭据
+    link("/Order/info/user", 'GET', {}, {}, {}, true).then(response => {
+      // 处理获取到的数据
+      orderData.value = response.data.result
     })
-        .then(response => {
-            orderData.value = response.data.result
-            console.log(orderData.value)
-        })
 
-    axios.request({
-        url: 'http://localhost/Receive/findByUserId',
-        method: 'GET',
-        params: {},
-        data: {},
-        withCredentials: true, // 确保发送凭据
-    })
-        .then(response => {
-            receive_option.value = response.data.result
-            // console.log(receive_option.value)
-        })
+  link("/Receive/findByUserId", 'GET', {}, {}, {}, true).then(response => {
+    // 处理获取到的数据
+    receive_option.value = response.data.result
+  })
 })
 
 //修改商品数量事件
 const handleChange = (object) => {
-    axios.request({
-        url: 'http://localhost/Shop/info/cout',
-        method: 'put',
-        params: {
-            shopId: object.shopId,
-            objectCout: object.shopCout
-        },
-        data: {},
-        withCredentials: true, // 确保发送凭据
-    })
-        .then(response => {
-            console.log(response)
-        })
+  link("/Shop/info/cout", 'PUT', {}, {
+    shopId: object.shopId,
+    objectCout: object.shopCout
+  }, {}, true).then(response => {
+    // 处理获取到的数据
+    console.log(response)
+  })
 
     payment.value = 0
     submitData.forEach(element => {
@@ -160,59 +141,37 @@ const payEvent = () => {
         element.receiveName = receive.value.split('|')[2]
     });
     console.log(submitData)
-    axios.request({
-        url: 'http://localhost/Order/order',
-        method: 'post',
-        headers: { 'Content-Type': 'application/json' },
-        params: {},
-        data: submitData,
-        withCredentials: true, // 确保发送凭据
+    link("/Order/order", 'POST', {}, {}, {'Content-Type': 'application/json'}, true).then(response => {
+      // 处理获取到的数据
+      console.log(response)
     })
-        .then(response => {
-            console.log(response)
-        })
 }
 
 //确认收货按钮事件
 const receiveObject = function (orderUUID, objectId) { 
     const receiveStatus = 2
-    axios.request({
-        url: 'http://localhost/Order/status',
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        params: {
-            orderUUID: orderUUID,
-            objectId: objectId,
-            orderStatus: receiveStatus
-        },
-        data: {},
-        withCredentials: true, // 确保发送凭据
+    link("/Order/status", 'PUT', {}, {
+      orderUUID: orderUUID,
+      objectId: objectId,
+      orderStatus: receiveStatus
+    }, {'Content-Type': 'application/json'}, true).then(response => {
+      // 处理获取到的数据
+      window.location.reload()
     })
-        .then(response => {
-            console.log(response)
-            window.location.reload()
-        })
 }
 
 //退货申请事件
 const returnSale = function (orderUUID, objectId) { 
         const receiveStatus = 3
-    axios.request({
-        url: 'http://localhost/Order/status',
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        params: {
-            orderUUID: orderUUID,
-            objectId: objectId,
-            orderStatus: receiveStatus
-        },
-        data: {},
-        withCredentials: true, // 确保发送凭据
+    link("/Order/status", 'PUT', {}, {
+      orderUUID: orderUUID,
+      objectId: objectId,
+      orderStatus: receiveStatus
+    }, {'Content-Type': 'application/json'}, true).then(response => {
+      // 处理获取到的数据
+      console.log(response)
+      window.location.reload()
     })
-        .then(response => {
-            console.log(response)
-            window.location.reload()
-        })
 }
 </script>
 

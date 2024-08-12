@@ -50,6 +50,7 @@ import {
     Setting,
     Histogram
 } from '@element-plus/icons-vue'
+import link from "@/api/Link.js";
 
 let router = useRouter();
 onMounted(() => {
@@ -62,19 +63,11 @@ const handleClose = (key, keyPath) => {
     console.log(key, keyPath)
 }
 const logout = function () {
-    console.log("ts");
-    axios.request({
-        url: 'http://localhost/User/logout',
-        method: 'get',
-        params: {},
-        data: {},
-        withCredentials: true
-    })
-        .then(response => {
-            // 处理获取到的数据
-            const data = response.data.result
-            router.push('/login')
-        })
+  link("/User/logout", 'GET', {}, {}, {}, true).then(response => {
+    // 处理获取到的数据
+    const data = response.data.result
+    router.push('/login')
+  })
 }
 </script>
 <style lang="scss" scoped>

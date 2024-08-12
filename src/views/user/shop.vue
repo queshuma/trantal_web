@@ -75,6 +75,7 @@ import indexTop from '../../components/indexTop.vue';
 import shopLeft from '../../components/shopLeft.vue';
 import indexBottom from '../../components/indexBottom.vue'
 import Decimal from 'decimal.js'
+import link from "@/api/Link.js";
 
 const shopData = ref()
 const submitData = reactive([])
@@ -90,46 +91,26 @@ let router = useRouter();
 onMounted(() => {
   console.log("test")
   //初始化购物车商品数据
-  axios.request({
-    url: 'http://localhost/Shop/info/userId',
-    method: 'get',
-    params: {},
-    data: {},
-    withCredentials: true, // 确保发送凭据
+  link("/Shop/info/userId", 'GET', {}, {}, {}, true).then(response => {
+    // 处理获取到的数据
+    shopData.value = response.data.result
   })
-    .then(response => {
-      shopData.value = response.data.result
-      console.log(shopData.value)
-    })
 
-  axios.request({
-    url: 'http://localhost/Receive/findByUserId',
-    method: 'GET',
-    params: {},
-    data: {},
-    withCredentials: true, // 确保发送凭据
+  link("/Receive/findByUserId", 'GET', {}, {}, {}, true).then(response => {
+    // 处理获取到的数据
+    receive_option.value = response.data.result
   })
-    .then(response => {
-      receive_option.value = response.data.result
-      // console.log(receive_option.value)
-    })
 })
 
 //修改商品数量事件
 const handleChange = (object) => {
-  axios.request({
-    url: 'http://localhost/Shop/update/cout',
-    method: 'post',
-    params: {
-      shopId: object.shopId,
-      objectCout: object.shopCout
-    },
-    data: {},
-    withCredentials: true, // 确保发送凭据
+  link("/Shop/update/cout", 'POST', {}, {
+    shopId: object.shopId,
+    objectCout: object.shopCout
+  }, {}, true).then(response => {
+    // 处理获取到的数据
+    console.log(response)
   })
-    .then(response => {
-      console.log(response)
-    })
 
   payment.value = 0
     submitData.forEach(element => {
@@ -171,20 +152,12 @@ const payEvent = () => {
     element.receiveName = receive.value.split('|')[2]
     element.remark = remark.value
   });
-  console.log(submitData)  
-  axios.request({
-    url: 'http://localhost/Order/order',
-    method: 'post',
-    headers: { 'Content-Type': 'application/json' },
-    params: {},
-    data: submitData,
-    withCredentials: true, // 确保发送凭据
+  console.log(submitData)
+  link("/Order/order", 'POST', {}, {'Content-Type': 'application/json'}, {}, true).then(response => {
+    // 处理获取到的数据
+    alert('付款成功!即将跳转到 我的订单 !')
+    router.push('/User/Order')
   })
-    .then(response => {
-      // console.log(response)
-      alert('付款成功!即将跳转到 我的订单 !')
-      router.push('/User/Order')
-    })
 }
 
 //滚轮监听事件，处理付款模块的位置问题

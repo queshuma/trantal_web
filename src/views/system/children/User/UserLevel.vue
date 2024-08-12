@@ -44,6 +44,7 @@
 <script lang="js" setup>
 import { onMounted, reactive, ref } from 'vue'
 import axios from 'axios';
+import link from "@/api/Link.js";
 
 const UserData = ref()
 const input = ref()
@@ -54,35 +55,17 @@ onMounted(() => {
 
 const submitInfo = () => {
     console.log(UserData.value)
-    axios.request({
-        url: 'http://localhost/User/user',
-        method: 'put',
-        headers: { 'Content-Type': 'application/json' },
-        params: {},
-        data: UserData.value,
-        withCredentials: true
-    })
-        .then(response => {
-            // 处理获取到的数据
-            UserData.value = response.data.result
-        })
+  link("/User/user", 'PUT', UserData.value, {}, {'Content-Type': 'application/json'}, true).then(response => {
+    // 处理获取到的数据
+    UserData.value = response.data.result
+  })
 }
 
 const getUserData = function () {
-    axios.request({
-        url: 'http://localhost/User/info/phone',
-        method: 'get',
-        params: {
-            userPhone: input.value
-        },
-        data: {},
-        withCredentials: true
-    })
-        .then(response => {
-            // 处理获取到的数据
-            UserData.value = response.data.result
-            console.log(response)
-        })
+  link("/User/info/phone", 'GET', {}, {userPhone: input.value}, {}, true).then(response => {
+    // 处理获取到的数据
+    UserData.value = response.data.result
+  })
  }
 
 </script>

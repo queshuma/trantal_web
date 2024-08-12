@@ -53,6 +53,7 @@ import { onMounted, reactive, ref } from "vue"
 import axios from "axios"
 import token from '../api/Token.js'
 import { useRouter } from "vue-router";
+import link from "@/api/Link.js";
 
 const data = ref({})
 const num = ref(1)
@@ -62,21 +63,12 @@ const handleChange = (value) => {
     console.log(value)
 }
 const getObjData = function(id) {
-    axios.request({
-        url: 'http://localhost/Object/info/id',
-        method: 'get',
-        params: { objectId: id },
-        data: {}
-    })
-        .then(response => {
-            // 处理获取到的数据
-            console.log(response.data.result)
-            data.value = response.data.result
-            // data = data.value
-            data.value.objectImage = data.value.objectImage.split(',')
-            data.value.objectImg = data.value.objectImg.split(',')
-            console.log(data.value)
-        })
+  link("/Object/info/id", 'GET',{}, { objectId: id }, {}, true).then(response => {
+    // 处理获取到的数据
+    data.value = response.data.result
+    data.value.objectImage = data.value.objectImage.split(',')
+    data.value.objectImg = data.value.objectImg.split(',')
+  })
 }
 onMounted(() => {
     let queryData = window.location.search;
@@ -105,21 +97,12 @@ const insertShop = function () {
         router.push('/login');
         return;
     }
-    axios.request({
-        url: 'http://localhost/Shop/shop',
-        method: 'post',
-        params: {
-            objectId: data.value.objectId,
-            shopCout: 1
-        },
-        data: {},
-        withCredentials: true, // 确保发送凭据
-    })
-        .then(response => {
-            console.log(response.data)
-            alert("添加购物车成功!")
-        })
-
+  link("/Shop/shop", 'POST',{}, {
+    objectId: data.value.objectId,
+    shopCout: 1
+  }, {}, true).then(response => {
+    alert("添加购物车成功!")
+  })
 }
 const toShop = function () { 
     router.push('/User/Shop')

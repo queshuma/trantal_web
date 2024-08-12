@@ -86,6 +86,7 @@ import { reactive, ref } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
 import axios from 'axios'
 import token from '../../../api/Token.js'
+import link from "@/api/Link.js";
 
 const formSize = ref('default')
 const ruleFormRef = ref()
@@ -114,18 +115,9 @@ saveInfo.value = {
     uuid: uuid,
 }
 
-axios.request({
-    url: 'http://localhost/ObjClasses/info/all',
-    method: 'GET',
-    headers: { 'Content-Type': 'application/json' },
-    withCredentials: true, // 确保发送凭据
-    params: {},
-    data: {}
+link("/ObjClasses/info/all", 'GET',{}, {}, { 'Content-Type': 'application/json' }, true).then(response => {
+  classesData.value = response.data.result[0].children
 })
-    .then(response => {
-        classesData.value = response.data.result[0].children
-        console.log(classesData.value)
-    })
 
 const submit = () => {
     alert("商品添加成功")
@@ -134,39 +126,12 @@ const submit = () => {
     data.objectImg = imgFiles.value.toString()
     data.userId = token().sub
     data.objectUUID = saveInfo.value.uuid
-    console.log(data)
-    axios.request({
-        url: 'http://localhost/Object/object',
-        method: 'POST',
-        // headers: { 'Content-Type': 'application/json' },
-        withCredentials: true, // 确保发送凭据
-        params: {
-            objectUUID: data.objectUUID,
-            objectName: data.objectName,
-            objectTitle: data.objectTitle,
-            objectCost: data.objectCost,
-            objectImage: data.objectImage,
-            objectBanner: data.objectBanner,
-            objectImg: data.objectImg,
-            objectPrice: data.objectPrice,
-            objectCout: data.objectCout,
-            objectClasses: data.objectClasses,
-            objectInfo: data.objectInfo,
-            userId: data.userId,
-        },
+    link("/Object/object", 'POST',{}, data, { 'Content-Type': 'application/json' }, true).then(response => {
+      console.log(response.data)
     })
-        .then(response => {
-            console.log(response.data)
-        })
 }
 
-const resetForm = () => {
-
-}
-
-const fileList = ref([
-
-])
+const fileList = ref([])
 
 const dialogImageUrl = ref('')
 const dialogVisible = ref(false)

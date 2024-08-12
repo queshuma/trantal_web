@@ -66,6 +66,7 @@ import { ref, reactive, onMounted, watch } from 'vue'
 
 import { ArrowDown, ArrowUp, Search } from '@element-plus/icons-vue'
 import { useRouter } from 'vue-router'
+import link from "@/api/Link.js";
 
 let router = useRouter()
 const classesData = ref();
@@ -77,30 +78,15 @@ const defaultPage = 1
 
 onMounted(() => {
     //获取所有分类
-    axios.request({
-        url: 'http://localhost/ObjClasses/info/all',
-        method: 'GET',
-        params: {},
-        data: {},
-        // withCredentials: true, // 确保发送凭据
+    link("/ObjClasses/info/all", 'GET',{}, {}, {}).then(response => {
+      classesData.value = response.data.result[0].children
+      getObject(defaultPage)
     })
-        .then(response => {
-            classesData.value = response.data.result[0].children
-            getObject(defaultPage)
-        })
 
     //获取商品总数
-    axios.request({
-        url: 'http://localhost/Object/cout',
-        method: 'GET',
-        params: {},
-        data: {},
-        withCredentials: true, // 确保发送凭据
+    link("/Object/cout", 'GET',{}, {}, {}, true).then(response => {
+      objectCout.value = response.data.result
     })
-        .then(response => {
-            objectCout.value = response.data.result
-        })
-
 })
 
 
@@ -136,47 +122,22 @@ const getObject = function (page) {
 
 //获取所有商品
 const getObjectAll = function (page) {
-    axios.request({
-        url: 'http://localhost/Object/info/all',
-        method: 'GET',
-        params: { pageNum: page, pageSize: 20 },
-        data: {},
-        // withCredentials: true, // 确保发送凭据
-    })
-        .then(response => {
-            objectData.value = response.data.result
-            console.log(objectData.value)
-        })
+  link("/Object/info/all", 'GET',{}, { pageNum: page, pageSize: 20 }, {}).then(response => {
+    objectData.value = response.data.result
+  })
 }
 //根据商品分类获取商品
 const getObjectByClasses = function (classes, page) {
-    //获取指定分类商品
-    axios.request({
-        url: 'http://localhost/Object/info/classes',
-        method: 'GET',
-        params: { classesName: classes, pageNum: page, pageSize: 20 },
-        data: {},
-        withCredentials: true, // 确保发送凭据
-    })
-        .then(response => {
-            objectData.value = response.data.result
-            console.log("classes")
-            console.log(objectData.value)
-        })
+  //获取指定分类商品
+  link("/Object/info/classes", 'GET',{}, { pageNum: page, pageSize: 20 }, {}, true).then(response => {
+    objectData.value = response.data.result
+  })
 }
 //根据商品标题信息获取商品
 const getObjectByTitle = function (title, page) {
-    axios.request({
-        url: 'http://localhost/Object/info/title',
-        method: 'GET',
-        params: { objectTitle: title, pageNum: page, pageSize: 20 },
-        data: {},
-        withCredentials: true, // 确保发送凭据
-    })
-        .then(response => {
-            console.log(response.data.result)
-            objectData.value = response.data.result
-        })
+  link("/Object/info/title", 'GET',{}, { pageNum: page, pageSize: 20 }, {}, true).then(response => {
+    objectData.value = response.data.result
+  })
 }
 
 //分类下拉显示功能

@@ -34,34 +34,22 @@ import { ref, onMounted } from 'vue'
 import axios from 'axios'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+import link from "@/api/Link.js";
 
 const router = useRouter()
 const search = ref('')
 //分页的配置信息
-const currentPage4 = ref(1)
-const pageSize4 = ref(9)
 const small = ref(false)
 const background = ref(false)
 const disabled = ref(false)
 const objectEditVisible = ref(true)
-const objectStatesNormal = 1
-const objectStatesBanned = 2
 const orderInfo = ref([])
 
 let store = useStore()
 onMounted(() => {
-    axios.request({
-        url: 'http://localhost/Order/info/all',
-        method: 'GET',
-        params: {},
-        data: {},
-        withCredentials: true
-    })
-        .then(response => {
-            // 处理获取到的数据
-            orderInfo.value = response.data.result
-            console.log("data", response.data.result)
-        })
+  link("/Order/info/all", 'GET',{}, {}, {}, true).then(response => {
+    orderInfo.value = response.data.result
+  })
 })
 
 const skipDetail = function (index, row) {

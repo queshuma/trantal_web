@@ -54,6 +54,7 @@ import { ref, reactive, onMounted } from 'vue'
 import axios from 'axios';
 import dayjs from 'dayjs'
 import { el } from 'element-plus/es/locales.mjs';
+import link from "@/api/Link.js";
 
 const now = new Date()
 const receive_data = ref([])
@@ -64,35 +65,20 @@ const receive_item = reactive({
 })
 
 onMounted(() => {
-    axios.request({
-        url: 'http://localhost/Receive/findByUserId',
-        method: 'GET',
-        params: {},
-        data: {},
-        withCredentials: true, // 确保发送凭据
-    })
-        .then(response => {
-            receive_data.value = response.data.result
-            console.log(receive_data.value)
-        })
+  link("/Receive/findByUserId", 'GET', {}, {}, {}, true).then(response => {
+    // 处理获取到的数据
+    receive_data.value = response.data.result
+  })
 })
 
 const deleteRow = (index) => {
-    const address_id = receive_data.value[index].receiveId
-    axios.request({
-        url: 'http://localhost/Receive/remove',
-        method: 'POST',
-        params: {
-            receiveId: address_id,
-        },
-        data: {},
-        withCredentials: true, // 确保发送凭据
-    })
-        .then(response => {
-            alert("地址删除成功")
-            console.log(response.data)
-            window.location.reload()
-        })
+  const address_id = receive_data.value[index].receiveId
+  link("/Receive/remove", 'POST', {}, {receiveId: address_id}, {}, true).then(response => {
+    // 处理获取到的数据
+    alert("地址删除成功")
+    console.log(response.data)
+    window.location.reload()
+  })
 }
 
 const onAddItem = () => {
@@ -101,28 +87,22 @@ const onAddItem = () => {
         || receive_item.receiveName.length == 0) {
         alert("请补充收件信息")
     } else {
-        axios.request({
-            url: 'http://localhost/Receive/add',
-            method: 'POST',
-            params: {
-                receiveAddress: receive_item.receiveAddress,
-                receiveName: receive_item.receiveName,
-                receivePhone: receive_item.receivePhone
-            },
-            data: {},
-            withCredentials: true, // 确保发送凭据
-        })
-            .then(response => {
-                console.log(response.data)
-                if (response.data.resultMsg === 'hasReceive') {
-                    alert("地址已存在,已为您刷新页面")
-                    window.location.reload()
-                } else {
-                    alert("地址添加成功")
-                    console.log(response.data)
-                    window.location.reload()
-                }
-            })
+      link("/Receive/add", 'POST', {}, {
+        receiveAddress: receive_item.receiveAddress,
+        receiveName: receive_item.receiveName,
+        receivePhone: receive_item.receivePhone
+      }, {}, true).then(response => {
+        // 处理获取到的数据
+        console.log(response.data)
+        if (response.data.resultMsg === 'hasReceive') {
+          alert("地址已存在,已为您刷新页面")
+          window.location.reload()
+        } else {
+          alert("地址添加成功")
+          console.log(response.data)
+          window.location.reload()
+        }
+      })
     }
 }
 

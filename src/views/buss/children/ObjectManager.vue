@@ -41,6 +41,7 @@ import axios from 'axios'
 import { useStore } from 'vuex'
 import objectEdit from '../../../components/objectEdit.vue'
 import { selectGroupKey, tagEmits } from 'element-plus'
+import link from "@/api/Link.js";
 
 const search = ref('')
 //分页的配置信息
@@ -72,39 +73,17 @@ watch(search, (newValue) => {
 });
 
 //获取商品总数
-const getObjectCout = function () { 
-    axios.request({
-        url: 'http://localhost/Object/cout/buss',
-        method: 'GET',
-        params: {},
-        data: {},
-        withCredentials: true
-    })
-        .then(response => {
-            // 处理获取到的数据
-            tableData.objectCout = response.data.result
-            console.log("商品总数" + tableData.objectCout)
-        })
+const getObjectCout = function () {
+  link("/Object/cout/buss", 'GET',{}, {}, {}, true).then(response => {
+    tableData.objectCout = response.data.result
+  })
 }
 
 //获取商品信息
-const getObject = function (pageNum) { 
-    axios.request({
-        url: 'http://localhost/Object/info/userId',
-        method: 'get',
-        params: {
-            pageNum: pageNum,
-            pageSize: defaultPageSize
-        },
-        data: {},
-        withCredentials: true
-    })
-        .then(response => {
-            // 处理获取到的数据
-            tableData.objectInfo = response.data.result
-            // tableData.objectShow = tableData.objectInfo
-            console.log("data", response.data.result)
-        })
+const getObject = function (pageNum) {
+  link("/Object/info/userId", 'GET',{}, {pageNum: pageNum, pageSize: defaultPageSize}, {}, true).then(response => {
+    tableData.objectInfo = response.data.result
+  })
 }
 
 //商品状态修改
@@ -128,21 +107,9 @@ const pageChange = function (page) {
  }
 
 const updateObjectStatus = (objectId, objectStatus) => {
-    axios.request({
-        url: 'http://localhost/Object/status',
-        method: 'PUT',
-        params: {
-            objectId: objectId,
-            objectStatus: objectStatus
-        },
-        data: {
-        }
-    })
-        .then(response => {
-            // 处理获取到的数据
-            tableData.userInfo = response.data.result
-            // console.log(response.data)
-        })
+  link("/Object/status", 'PUT',{}, {objectId: objectId, objectStatus: objectStatus}, {}).then(response => {
+    tableData.userInfo = response.data.result
+  })
 }
 
 

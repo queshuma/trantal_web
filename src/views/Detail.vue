@@ -17,9 +17,6 @@
 </template>
 
 <script lang="js" setup>
-import indexTop from '../components/indexTop.vue'
-import detailMain from '../components/detailMain.vue'
-import indexBottom from '../components/indexBottom.vue';
 </script>
 
 <style lang="scss" scoped>

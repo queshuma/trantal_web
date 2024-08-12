@@ -39,6 +39,7 @@ import axios from 'axios'
 import { useStore } from 'vuex'
 import objectEdit from '../../../../components/objectEdit.vue'
 import { selectGroupKey, tagEmits } from 'element-plus'
+import link from "@/api/Link.js";
 
 const search = ref('')
 //分页的配置信息
@@ -70,54 +71,31 @@ watch(search, (newValue) => {
 //获取商品数据函数
 const getObject = function (page) {
     if (search.value == '') {
-        axios.request({
-            url: 'http://localhost/Object/cout',
-            method: 'GET',
-            params: {},
-            data: {},
-            // withCredentials: true, // 确保发送凭据
-        })
-            .then(response => {
-                tableData.objectCout = response.data.result
-            })
-        axios.request({
-            url: 'http://localhost/Object/info/all',
-            method: 'GET',
-            params: {
-                pageNum: page,
-                pageSize: 9
-            },
-            data: {}
-        })
-            .then(response => {
-                // 处理获取到的数据
-                tableData.objectInfo = response.data.result
-                console.log("data", response.data.result)
-            })
+      link("/Object/cout", 'GET',{}, {}, {}).then(response => {
+        // 处理获取到的数据
+        tableData.objectCout = response.data.result
+      })
+
+      link("/Object/info/all", 'GET',{}, {
+        pageNum: page,
+        pageSize: 9
+      }, {}).then(response => {
+        // 处理获取到的数据
+        tableData.objectInfo = response.data.result
+      })
     } else {
-                axios.request({
-            url: 'http://localhost/Object/cout/title',
-            method: 'GET',
-            params: {
-                objectTitle: search.value
-            },
-            data: {},
-            // withCredentials: true, // 确保发送凭据
-        })
-            .then(response => {
-                tableData.objectCout = response.data.result
-            })
-        axios.request({
-            url: 'http://localhost/Object/info/title',
-            method: 'GET',
-            params: { objectTitle: search.value, pageNum: defaultPage, pageSize: 20 },
-            data: {},
-            withCredentials: true, // 确保发送凭据
-        })
-            .then(response => {
-                console.log(response.data.result)
-                tableData.objectInfo = response.data.result
-            })
+      link("/Object/cout/title", 'GET',{}, {objectTitle: search.value}, {}).then(response => {
+        // 处理获取到的数据
+        tableData.objectCout = response.data.result
+      })
+
+      link("/Object/info/title", 'GET',{}, {
+        objectTitle: search.value,
+        pageNum: defaultPage, pageSize: 20
+      }, {}, true).then(response => {
+        // 处理获取到的数据
+        tableData.objectInfo = response.data.result
+      })
     }
 
 }
@@ -141,21 +119,13 @@ const handleEdit = (index, row) => {
 
 //商品状态更新事件
 const updateObjectStatus = (objectId, objectStatus) => {
-    axios.request({
-        url: 'http://localhost/Object/status',
-        method: 'PUT',
-        params: {
-            objectId: objectId,
-            objectStatus: objectStatus
-        },
-        data: {
-        }
-    })
-        .then(response => {
-            // 处理获取到的数据
-            tableData.userInfo = response.data.result
-            // console.log(response.data)
-        })
+  link("/Object/status", 'PUT',{}, {
+    objectId: objectId,
+    objectStatus: objectStatus
+  }, {}).then(response => {
+    // 处理获取到的数据
+    tableData.userInfo = response.data.result
+  })
 }
 
 //页码变化后事件

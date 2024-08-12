@@ -71,6 +71,7 @@ import axios from 'axios'
 import { useRouter } from 'vue-router';
 import indexTop from '../../components/indexTop.vue'
 import indexBottom from '../../components/indexBottom.vue'
+import link from "@/api/Link.js";
 
 const router = useRouter()
 const formState = reactive({
@@ -164,22 +165,15 @@ const rules = reactive({
 const onFinish = (values) => {
   console.log('Success:', values.userPassword)
 
-  axios.request({
-    url: 'http://localhost/User/user',
-    method: 'post',
-    params: {
-      userAccount: values.userAccount,
-      userName: values.userName,
-      userPhone: values.userPhone,
-      userEmail: values.userEmail,
-      userPassword: values.userPassword
-    }
+  link("/User/user", 'POST',{}, {
+    userAccount: values.userAccount,
+    userName: values.userName,
+    userPhone: values.userPhone,
+    userEmail: values.userEmail,
+    userPassword: values.userPassword
+  }, {}, true).then(response => {
+    router.push('/login')
   })
-    .then(response => {
-      // 处理获取到的数据
-      console.log(response.data);
-      router.push('/login')
-    })
 }
 
 const onFinishFailed = (errorInfo) => {

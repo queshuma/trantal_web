@@ -42,6 +42,7 @@ import { computed, ref, reactive, onMounted, watch } from 'vue'
 import axios from 'axios'
 import { useStore } from 'vuex'
 import { shouldTransformRef } from 'vue/compiler-sfc';
+import link from "@/api/Link.js";
 
 //分页的配置信息
 const currentPage4 = ref(1)
@@ -58,20 +59,10 @@ const tableData = reactive({
 })
 let store = useStore()
 onMounted(() => {
-  axios.request({
-    url: 'http://localhost/User/info/level',
-    method: 'get',
-    params: {
-      userLevel: 1,
-    },
-    data: {}
+  link("/User/info/level", 'GET',{}, {}, {}).then(response => {
+    tableData.userInfo = response.data.result
+    tableData.bussShow = tableData.userInfo
   })
-    .then(response => {
-      // 处理获取到的数据
-      console.log(response.data.result)
-      tableData.userInfo = response.data.result
-      tableData.bussShow = tableData.userInfo
-    })
 })
 
 
@@ -97,21 +88,12 @@ const handleCurrentChange = (val) => {
   currentPage4.value = val
 }
 const updateUserStatus = (userId, userStatus) => {
-  axios.request({
-    url: 'http://localhost/User/status',
-    method: 'PUT',
-    params: {
-      userId: userId,
-      userStatus: userStatus
-    },
-    data: {
-    }
+  link("/User/status", 'PUT',{}, {
+    userId: userId,
+    userStatus: userStatus
+  }, {}).then(response => {
+    console.log(response.data)
   })
-    .then(response => {
-      // 处理获取到的数据
-      // tableData.userInfo = response.data.result
-      console.log(response.data)
-    })
 }
 
 

@@ -65,6 +65,7 @@
 import { onMounted, reactive, ref } from 'vue'
 import axios from 'axios';
 import { useRouter } from 'vue-router';
+import link from "@/api/Link.js";
 
 const router = useRouter();
 const formSize = ref('default')
@@ -79,40 +80,20 @@ onMounted(() => {
         console.log("success")
         orderUUID.value = queryDict["orderUUID"]
         objectId.value = queryDict["objectId"]
-        axios.request({
-            url: 'http://localhost/Order/info/orderUUID',
-            method: 'get',
-            params: {
-                orderUUID: orderUUID.value,
-                objectId: objectId.value
-            },
-            data: {},
-            withCredentials: true
-        })
-            .then(response => {
-                // 处理获取到的数据
-                orderData.value = response.data.result
-                console.log(orderData.value)
-            })
+      link("/Order/info/orderUUID", 'GET',{}, {orderUUID: orderUUID.value, objectId: objectId.value}, {}).then(response => {
+        orderData.value = response.data.result
+      })
     }
 })
 
-const uploadTrack = function () { 
-    axios.request({
-        url: 'http://localhost/Order/track',
-        method: 'PUT',
-        params: {
-            orderUUID: orderUUID.value,
-            objectId: objectId.value,
-            orderTrack: orderData.value.orderTrack,
-        },
-        data: {},
-        withCredentials: true
-    })
-        .then(response => {
-            // 处理获取到的数据
-            window.location.reload()
-        })
+const uploadTrack = function () {
+  link("/Order/track", 'PUT',{}, {
+    orderUUID: orderUUID.value,
+    objectId: objectId.value,
+    orderTrack: orderData.value.orderTrack,
+  }, {}, true).then(response => {
+    window.location.reload()
+  })
 }
 
 const orderStatusEvent = function (num) { 
@@ -135,21 +116,13 @@ const orderStatusEvent = function (num) {
         //取消订单
         updOrderStatus = 4
      }
-    axios.request({
-        url: 'http://localhost/Order/status',
-        method: 'PUT',
-        params: {
-            orderUUID: orderUUID.value,
-            objectId: objectId.value,
-            orderStatus: updOrderStatus,
-        },
-        data: {},
-        withCredentials: true
-    })
-        .then(response => {
-            // 处理获取到的数据
-            window.location.reload()
-        })
+  link("/Order/status", 'PUT',{}, {
+    orderUUID: orderUUID.value,
+    objectId: objectId.value,
+    orderStatus: updOrderStatus,
+  }, {}, true).then(response => {
+    window.location.reload()
+  })
 }
 
 </script>

@@ -30,6 +30,7 @@
 import { reactive, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import axios from 'axios'
+import link from "@/api/Link.js";
 
 let store = useStore()
 
@@ -41,20 +42,10 @@ watch(() => store.state.HomeModule.currentUserInfo, (newValue) => {
     data.value = newValue
 });
 let formUpdate = () => {
-    axios.request({
-        url: 'http://localhost/User/user',
-        method: 'put',
-        headers: { 'Content-Type': 'application/json' },
-        params: {},
-        data: data.value,
-        withCredentials: true
-    })
-        .then(response => {
-            // 处理获取到的数据
-            UserData.value = response.data.result
-        })
-    
-        store.state.HomeModule.userEditVisible = false
+  link("/User/user", 'PUT',data.value, {}, { 'Content-Type': 'application/json' }, true).then(response => {
+    UserData.value = response.data.result
+  })
+  store.state.HomeModule.userEditVisible = false
 }
 </script>
 <style scoped>

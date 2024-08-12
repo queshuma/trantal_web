@@ -59,6 +59,7 @@ import axios from 'axios'
 import { useRouter } from 'vue-router';
 import token from '../../api/Token';
 import { alertEffects } from 'element-plus'
+import link from "@/api/Link.js";
 
 let router = useRouter();
 
@@ -70,35 +71,27 @@ const formState = reactive({
 const onFinish = (values) => {
   console.log('Success:', values)
 
-  axios.request({
-    url: 'http://localhost/User/login',
-    method: 'post',
-    params: {
-      info: values.username,
-      password: values.password
-    },
-    withCredentials: true
+  link("/User/login", 'POST',{}, {
+    info: values.username,
+    password: values.password
+  }, {}, true).then(response => {
+    const tk = token()
+    if (tk == null) {
+      alert('登录失败,请重试')
+      router.push('/login')
+    } else if (tk.userLevel == 1) {
+      alert('登入成功，正在跳转仪表盘')
+      router.push("/Buss/board")
+      // console.log("level:" + 1)
+    } else if (tk.userLevel == 2) {
+      alert('登入成功，正在跳转管理员界面')
+      // console.log("level:" + 2)
+      router.push("/Admin/board")
+    } else {
+      alert("登录成功")
+      router.push("/")
+    }
   })
-    .then(response => {
-      // 处理获取到的数据
-      console.log(response.data);
-      const tk = token()
-      if (tk == null) {
-        alert('登录失败,请重试')
-        router.push('/login')
-      } else if (tk.userLevel == 1) {
-        alert('登入成功，正在跳转仪表盘')
-        router.push("/Buss/board")
-        // console.log("level:" + 1)
-      } else if (tk.userLevel == 2) {
-        alert('登入成功，正在跳转管理员界面')
-        // console.log("level:" + 2)
-        router.push("/Admin/board")
-      } else {
-        alert("登录成功")
-        router.push("/")
-      }
-    })
 }
 
 const onFinishFailed = (errorInfo) => {

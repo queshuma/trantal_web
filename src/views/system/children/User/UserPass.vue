@@ -30,6 +30,7 @@
 <script lang="js" setup>
 import { reactive, ref } from 'vue'
 import axios from 'axios';
+import link from "@/api/Link.js";
 
 const userInfo = reactive(
     {
@@ -43,41 +44,25 @@ const userInfo = reactive(
 const checkUser = ref(false)
 
 //校验用户信息
-const checkEvent = function () { 
-    axios.request({
-        url: 'http://localhost/User/info/id',
-        method: 'GET',
-        params: {
-            userId: userInfo.id
-        },
-        data: {},
-        withCredentials: true
-    })
-        .then(response => {
-            // 处理获取到的数据
-            const userData = response.data.result
-            userInfo.account = userData.userAccount
-            userInfo.name = userData.userName
-            userInfo.phone = userData.userPhone
-            checkUser.value = !checkUser.value
-        })
+const checkEvent = function () {
+  link("/User/info/id", 'GET', {}, {userId: userInfo.id}, {}, true).then(response => {
+    // 处理获取到的数据
+    const userData = response.data.result
+    userInfo.account = userData.userAccount
+    userInfo.name = userData.userName
+    userInfo.phone = userData.userPhone
+    checkUser.value = !checkUser.value
+  })
 }
 
 const modifyEvent = () => {
-    axios.request({
-        url: 'http://localhost/User/password',
-        method: 'PUT',
-        params: {
-            userId: userInfo.id,
-            password: userInfo.password
-        },
-        data: {},
-        withCredentials: true
-    })
-        .then(response => {
-            // 处理获取到的数据
-            console.log(response.data.result)
-        })
+  link("/User/password", 'PUT', {}, {
+    userId: userInfo.id,
+    password: userInfo.password
+  }, {}, true).then(response => {
+    // 处理获取到的数据
+    console.log(response.data.result)
+  })
 }
 
 const reset = function() {

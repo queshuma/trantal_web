@@ -58,6 +58,7 @@
 <script lang="js" setup>
 import { onMounted, ref, reactive } from 'vue'
 import axios from 'axios'
+import link from "@/api/Link.js";
 
 const handleNodeClick = (data) => {
     console.log(data)
@@ -73,18 +74,11 @@ const insertInfo = reactive({
 })
 
 onMounted(() => {
-    axios.request({
-        url: 'http://localhost/ObjClasses/info/all',
-        method: 'get',
-        params: {},
-        data: {}
-    })
-        .then(response => {
-            // 处理获取到的数据
-            data.value = response.data.result
-            table.value = data.value[0].children
-            console.log("data", data.value[0].children)
-        })
+  link("/ObjClasses/info/all", 'GET', {}, {}, {}).then(response => {
+    // 处理获取到的数据
+    data.value = response.data.result
+    table.value = data.value[0].children
+  })
 })
 
 const defaultProps = {
@@ -94,20 +88,13 @@ const defaultProps = {
 
 //下线
 const removeEvent = function (row) {
-    axios.request({
-        url: 'http://localhost/ObjClasses/status',
-        method: 'PUT',
-        params: {
-            objClassesId: row.id,
-            currentStatus: row.status
-        },
-        data: {},
-        // withCredentials: true, // 确保发送凭据
-    })
-        .then(response => {
-            window.location.reload()
-        })
-
+  link("/ObjClasses/status", 'PUT', {}, {
+    objClassesId: row.id,
+    currentStatus: row.status
+  }, {}).then(response => {
+    // 处理获取到的数据
+    window.location.reload()
+  })
 }
 
 //插入或者编辑分类
@@ -115,34 +102,22 @@ const insertEvent = function () {
     if (insertInfo.objClassesName.trim().length == 0) {
         alert("请输入分类内容")
     } else if (insertInfo.objClassesId == 0) {
-        axios.request({
-            url: 'http://localhost/ObjClasses/classes',
-            method: 'POST',
-            params: {
-                classesName: insertInfo.objClassesName,
-                weightId: insertInfo.objClassesWeightId
-            },
-            data: {},
-            // withCredentials: true, // 确保发送凭据
+        link("/ObjClasses/classes", 'POST', {}, {
+          classesName: insertInfo.objClassesName,
+          weightId: insertInfo.objClassesWeightId``
+        }, {}).then(response => {
+          // 处理获取到的数据
+          window.location.reload()
         })
-            .then(response => {
-                window.location.reload()
-            })
     } else if (insertInfo.objClassesId != 0) {
-        axios.request({
-            url: 'http://localhost/ObjClasses/info',
-            method: 'PUT',
-            params: {
-                classesId: insertInfo.objClassesId,
-                classesName: insertInfo.objClassesName,
-                weightId: insertInfo.objClassesWeightId
-            },
-            data: {},
-            // withCredentials: true, // 确保发送凭据
-        })
-            .then(response => {
-                window.location.reload()
-            })
+      link("/ObjClasses/info", 'PUT', {}, {
+        classesId: insertInfo.objClassesId,
+        classesName: insertInfo.objClassesName,
+        weightId: insertInfo.objClassesWeightId
+      }, {}).then(response => {
+        // 处理获取到的数据
+        window.location.reload()
+      })
     }
 
 }
@@ -166,20 +141,13 @@ const changeStatus = function (row) {
     } else {
         row.status = 1
     }
-    axios.request({
-        url: 'http://localhost/ObjClasses/status',
-        method: 'PUT',
-        params: {
-            objClassesId: row.id,
-            status: row.status,
-        },
-        data: {},
-        // withCredentials: true, // 确保发送凭据
-    })
-        .then(response => {
-            console.log(response.data.result)
-            // window.location.reload()
-        })
+  link("/ObjClasses/status", 'PUT', {}, {
+    objClassesId: row.id,
+    status: row.status,
+  }, {}).then(response => {
+    // 处理获取到的数据
+    console.log(response.data.result)
+  })
 }
 
 //修改分类列表状态
@@ -191,20 +159,13 @@ const changeListStatus = function (row) {
         row.listStatus = 1
     }
     console.log("end:" + row.listStatus)
-    axios.request({
-        url: 'http://localhost/ObjClasses/listStatus',
-        method: 'PUT',
-        params: {
-            objClassesId: row.id,
-            listStatus: row.listStatus,
-        },
-        data: {},
-        // withCredentials: true, // 确保发送凭据
+    link("/ObjClasses/listStatus", 'PUT', {}, {
+      objClassesId: row.id,
+      listStatus: row.listStatus,
+    }, {}).then(response => {
+      // 处理获取到的数据
+      console.log(response.data.result)
     })
-        .then(response => {
-            console.log(response.data.result)
-            // window.location.reload()
-        })
 }
 
 const changeObjectStatus = function (row) {
@@ -213,19 +174,13 @@ const changeObjectStatus = function (row) {
     } else {
         row.objectStatus = 1
     }
-    axios.request({
-        url: 'http://localhost/ObjClasses/objectStatus',
-        method: 'PUT',
-        params: {
-            objClassesId: row.id,
-            objectStatus: row.objectStatus,
-        },
-        data: {},
-        // withCredentials: true, // 确保发送凭据
-    })
-        .then(response => {
-            // window.location.reload()
-        })
+  link("/ObjClasses/objectStatus", 'PUT', {}, {
+    objClassesId: row.id,
+    objectStatus: row.objectStatus,
+  }, {}).then(response => {
+    // 处理获取到的数据
+    // console.log(response.data.result)
+  })
 }
 
 </script>

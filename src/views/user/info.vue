@@ -54,54 +54,28 @@
 import { onMounted, reactive, ref } from 'vue'
 
 import axios from 'axios';
+import link from "@/api/Link.js";
 
 const formSize = ref('default')
 const UserData = ref({})
 
-
-axios.request({
-    url: 'http://localhost/User/info',
-    method: 'get',
-    params: {},
-    data: {},
-    withCredentials: true
+link("/User/info", 'GET',{}, {}, {}).then(response => {
+  // 处理获取到的数据
+  UserData.value = response.data.result
 })
-    .then(response => {
-        // 处理获取到的数据
-        console.log(response)
-        UserData.value = response.data.result
-        console.log(UserData.value.userAccount)
-    })
 
 const submitInfo = () => {
-    console.log(UserData.value.userAccount)
-    axios.request({
-                url: 'http://localhost/User/user',
-        method: 'put',
-        headers: { 'Content-Type': 'application/json' },
-        params: {},
-        data: UserData.value,
-        withCredentials: true
-    })
-        .then(response => {
-            // 处理获取到的数据
-            UserData.value = response.data.result
-        })
+  link("/User/user", 'GET', UserData.value, {}, { 'Content-Type': 'application/json' }, true).then(response => {
+    // 处理获取到的数据
+    UserData.value = response.data.result
+  })
 }
 
 const resetForm = () => {
-    axios.request({
-        url: 'http://localhost/User/find',
-        method: 'get',
-        params: {},
-        data: {},
-        withCredentials: true
-    })
-        .then(response => {
-            // 处理获取到的数据
-            console.log(response)
-            UserData.value = response.data.result
-        })
+  link("/User/find", 'GET', UserData.value, {}, {}, true).then(response => {
+    // 处理获取到的数据
+    UserData.value = response.data.result
+  })
 }
 
 
