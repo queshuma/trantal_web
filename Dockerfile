@@ -5,10 +5,10 @@ FROM nginx:alpine
 COPY ./dist /usr/share/nginx/html  
  
 # 如果需要，复制nginx配置文件  
-# COPY nginx.conf /etc/nginx/nginx.conf  
+COPY nginx.conf /etc/nginx/nginx.conf
  
 # 暴露端口  
-EXPOSE 80  
+EXPOSE 8080
  
 # 设置容器启动时执行nginx  
 CMD ["nginx", "-g", "daemon off;"]
