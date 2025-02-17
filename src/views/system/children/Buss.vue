@@ -59,7 +59,7 @@ const tableData = reactive({
 })
 let store = useStore()
 onMounted(() => {
-  link("/User/info/level", 'GET',{}, {}, {}).then(response => {
+  link("/User/info/level", 'GET',{}, {userLevel: 1}, {}).then(response => {
     tableData.userInfo = response.data.result
     tableData.bussShow = tableData.userInfo
   })

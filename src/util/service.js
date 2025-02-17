@@ -1,6 +1,6 @@
 import axios from "axios"
 
-let axiosurl = "http://49.232.61.41"
+let axiosurl = "http://localhost:80"
 
 const service = axios.create({
   baseURL: axiosurl
